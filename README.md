@@ -20,8 +20,10 @@ Warning:
 
 How to use:
 - ``/`` is just start dir lol
-- ``/ping`` returns pong, if all's ok (in future will return ping to Amino API)
+- ``/ping`` returns pong, if all's ok (in future will return ping to Amino API).
+Example: ``localhost:7777/ping``
 - ``/getsid`` needs _email_ and _passwd_ as arguments, else it'll return error with code 1. If host got SID, it return this.
+Example: ``localhost:7777/getsid?email=iwant@peace-in.world&passwd=glorytoua``
 
 ## Response handling
 All answers are JSON for easiest work with API.
