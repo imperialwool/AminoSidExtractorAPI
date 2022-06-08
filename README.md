@@ -4,6 +4,7 @@
 [![Last commit](https://img.shields.io/github/last-commit/toxichead/AminoSidExtractorAPI?style=for-the-badge)](https://github.com/toxichead/AminoSidExtractorAPI/commits/main) [![Issues](https://img.shields.io/github/issues/toxichead/AminoSidExtractorAPI?style=for-the-badge)](https://github.com/toxichead/AminoSidExtractorAPI/issues)
 
 Provides you ability to up your own API for getting SID for Amino (aminoapps.com).
+Replit-ready!
 
 ## Quick start
 How to start:
