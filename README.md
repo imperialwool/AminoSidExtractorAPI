@@ -39,4 +39,4 @@ To get any data, you should move into _answer_ **always**.
 If you got error, it will keep in _"answer"_ too, but instead _"sid"_ you will see only _"error"_ thing. It contains details, so I recommend to move into _error_ to see, what error you have got. All errors returns _"error_code"_ and _"error_desc"_.
 _"Verification Required"_ error also returns extra field _"verifyLink"_. 
 
-Example of error: ``{"answer":{"error":{"error_code":200,"error_desc":"Account or password is incorrect! If you forget your password, please reset it."}}}``
+Example of error: ``{"answer":{"error":{"error_code":200,"error_desc":"Wrong password or/and email. Try again..?"}}}``
