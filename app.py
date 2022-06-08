@@ -1,5 +1,6 @@
 #IMPORTING
 import aminofix
+import requests
 from time import sleep
 from flask import Flask, jsonify, request
 
@@ -18,18 +19,30 @@ def sidextractor():
     emaill = request.args.get('email')
     passwd = request.args.get('passwd')
     proxy = request.args.get('proxy')
+    proxies = {}
+    if proxy:
+        proxies = {"https": proxy}
         
     if emaill == '' or passwd == '':
         return jsonify({"answer":{"error":{"error_code":1,"error_desc":"No data provided, waited for email and passwd"}}})
     
     try:
-        client = aminofix.Client()
+        client = aminofix.Client(proxies=proxies)
         client.login(email=emaill, password=passwd)
         sid = client.sid
         sleep(2)
         client.logout()
         
         return jsonify({"answer":{"sid":sid}})
+    except aminofix.lib.util.exceptions.IpTemporaryBan:
+        return jsonify({"answer":{"error":{"error_code":403,"error_desc":"Looks like this IP banned and here we can't get any SID. So, use proxy or change host."}}})
+    except requests.exceptions.ConnectionError as e:
+        if proxy:
+            statusinfo = f"Proxy aborted connection. Try another one. Details: {e}"
+        else:
+            statusinfo = f"Connection failed. Try another one. Details: {e}"
+        return jsonify({"answer":{"error":{"error_code":3,"error_desc":statusinfo}}})
+    
     except Exception as e:
         exjson = e.args[0]
         try:
@@ -60,4 +73,4 @@ if __name__ == '__main__':
     # app.run()
     # running with waitress (much easier because it starts as usual file)
     from waitress import serve
-    serve(app, host="0.0.0.0", port=80)
+    serve(app, host="0.0.0.0", port=443)

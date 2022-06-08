@@ -9,6 +9,7 @@ python = "^3.8"
 Flask = "^2.1.2"
 "amino.fix" = "^2.3.4"
 waitress = "^2.1.2"
+PySocks = "^1.7.1"
 
 [tool.poetry.dev-dependencies]
 
