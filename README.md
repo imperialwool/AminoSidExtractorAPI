@@ -8,17 +8,20 @@ Provides you ability to up your own API for getting SID for Amino (aminoapps.com
 ## Quick start
 How to start:
 - install Python3 and pip, if you want you can use venv
-- install Flask and AminoFix by command ``pip install amino.fix flask``
+- install Flask, Amino.Fix and Waitress by command ``pip install amino.fix flask waitress --upgrade``
 - clone repository or download file from repo
 - move to directory where you cloned repo/saved file
-- up your API by starting Flask (f.e., ``flask run -p 7777 -h 0.0.0.0`` will run your API on port 7777 and on all IPs what your server/host have)
+
+Two ways to start API:
+- starting it with Flask (f.e., `flask run -p 7777 -h 0.0.0.0` will run your API on port 7777 and on all IPs what your server/host have)
+- starting it as usual Python file (just needed configuration in first time, but it's not so necessary)
 
 Warning:
 - API willn't work on most servers 'cause it will bump into 403 Forbidden error
 - if you will be using API a lot, can be "Too many requests" error
 - host it on own risk, I disclaim all responsibility, also you free to use this even in production bcause it useless thing lmao
 
-How to use:
+## Routes:
 - ``/`` is just start dir lol
 - ``/ping`` returns pong, if all's ok (in future will return ping to Amino API).
 Example: ``localhost:7777/ping``
@@ -33,6 +36,7 @@ Example of answer: ``{"answer":{"sid":"AnsiMSI...XU2Q"}}``
 To get any data, you should move into _answer_ **always**.
 
 ## Error handling
-If you got error, it will keep in _answer_ too, but instead _sid_ you will see only _error_ thing. It contains details, so I recommend to move into _error_ to see, what error you have got. At now I've done two error handling: "Too many requests" and "Verification Required". Last returns extra field "verifyLink". All errors include "Verification Required" returns "error_code" and "error_desc".
+If you got error, it will keep in _"answer"_ too, but instead _"sid"_ you will see only _"error"_ thing. It contains details, so I recommend to move into _error_ to see, what error you have got. All errors returns _"error_code"_ and _"error_desc"_.
+_"Verification Required"_ error also returns extra field _"verifyLink"_. 
 
 Example of error: ``{"answer":{"error":{"error_code":200,"error_desc":"Account or password is incorrect! If you forget your password, please reset it."}}}``
