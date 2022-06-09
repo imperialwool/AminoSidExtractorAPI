@@ -21,13 +21,17 @@ Warning:
 - API willn't work on most servers 'cause it will bump into 403 Forbidden error
 - if you will be using API a lot, can be "Too many requests" error
 - host it on own risk, I disclaim all responsibility, also you free to use this even in production bcause it useless thing lmao
+- **if you want to use socks proxy, install `PySocks`** (`pip install PySocks`). also keep in mind that **proxy support is freaking unstable**. i'd be grateful if you will help me to improve it and my ~~bad~~ code
 
 ## Routes:
 - ``/`` is just start dir lol
 - ``/ping`` returns pong, if all's ok (in future will return ping to Amino API).
-Example: ``localhost:7777/ping``
+> Example: ``localhost:7777/ping``
 - ``/getsid`` needs _email_ and _passwd_ as arguments, else it'll return error with code 1. If host got SID, it return this.
-Example: ``localhost:7777/getsid?email=iwant@peace-in.world&passwd=glorytoua``
+> Example without proxy: ``localhost:7777/getsid?email=iwant@peace-in.world&passwd=glorytoua``
+
+
+> Example with proxy: ``localhost:7777/getsid?email=coffee@foo.bar&passwd=uaistheworld&proxy=socks5://1.1.1.1:3333``
 
 ## Response handling
 All answers are JSON for easiest work with API.
