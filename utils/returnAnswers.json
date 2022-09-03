@@ -1,0 +1,6 @@
+{
+    "startPoint": {"answer": "403 Forbidden. /j"},
+    "pingPong": {"answer": "Pong!"},
+
+    "returnSid": {"answer": {"sid": null}}
+}

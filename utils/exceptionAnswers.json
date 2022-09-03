@@ -1,0 +1,14 @@
+{
+    "wrongData": "Wrong password or/and email. Try again..?",
+    "TAdidShit": "Seems like Team Amino something did with API again. Check if library works at all. Also you can rewrite API on another lib for Amino, if you want.",
+    "maybeMaintenance": "Sounds like TA doing something with servers. Just wait, i guess.",
+    "tooManyRequests": "Summary to host was sent a lot of requests. Just wait a little bit.",
+    "deletedOrBanned": "Can't log in to the account. It can be deleted or banned by TA, f.e.",
+    "newLogin": "Your try to get sid here is new, so you should to verify login. Next times when you will try to get sid after verify this problem will disappear, if server will keep IP what it has right now of course.",
+    
+    "IPban": "Looks like this IP banned and here we can't get any SID. So, use proxy or change host.",
+    "noEmail": "No email provided",
+    "noPasswd": "No password provided",
+
+    "answerExample": {"answer": {"error": {"error_code": null, "error_desc": null}}}
+}

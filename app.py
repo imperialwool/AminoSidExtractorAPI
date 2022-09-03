@@ -1,73 +1,93 @@
 #IMPORTING
+import json
 import aminofix
 import requests
-from time import sleep
 from flask import Flask, jsonify, request
 
 #INIT
 app = Flask(__name__)
+returnAnswers = json.loads(open('./utils/returnAnswers.json').read())
+exceptionAnswers = json.loads(open('./utils/exceptionAnswers.json').read())
+editException = exceptionAnswers['answerExample']['answer']['error']
 
+###########
 #API ROUTES
+###########
+#start point
 @app.route('/')
-def ghoul():
-    return jsonify({"answer":None})
+def startPoint():
+    return jsonify(returnAnswers['startPoint'])
+
+###########
+#ping point (later will return ping too)
 @app.route('/ping')
-def pingpong():
-    return jsonify({"answer": "pong"})
-@app.route('/getsid')
+def pingPong():
+    return jsonify(returnAnswers['pingPong'])
+
+###########
+#sid getter (get+post)
+@app.route('/getsid', methods = ['POST', 'GET'])
 def sidextractor():
-    emaill = request.args.get('email')
-    passwd = request.args.get('passwd')
-    proxy = request.args.get('proxy')
+    if request.method == 'POST':
+        emaill, passwd, proxy = emaill = request.form.get('email'), request.form.get('passwd'), request.form.get('proxy')
+    else:
+        emaill, passwd, proxy = request.args.get('email'), request.args.get('passwd'), request.args.get('proxy')
     proxies = {}
     if proxy:
         proxies = {"https": proxy}
+
+    if emaill == '':
+        editException["error_code"], editException["error_desc"] = 1, exceptionAnswers['noEmail']
+        return jsonify(exceptionAnswers['answerExample'])
+    if passwd == '':
+        editException["error_code"], editException["error_desc"] = 1, exceptionAnswers['noPasswd']
+        return jsonify(exceptionAnswers['answerExample'])
         
-    if emaill == '' or passwd == '':
-        return jsonify({"answer":{"error":{"error_code":1,"error_desc":"No data provided, waited for email and passwd"}}})
-    
     try:
         client = aminofix.Client(proxies=proxies)
         client.login(email=emaill, password=passwd)
-        sid = client.sid
-        sleep(2)
+        returnAnswers['returnSid']['answer']['sid'] = client.sid
         client.logout()
-        
-        return jsonify({"answer":{"sid":sid}})
+        return jsonify(returnAnswers['returnSid'])
     except aminofix.lib.util.exceptions.IpTemporaryBan:
-        return jsonify({"answer":{"error":{"error_code":403,"error_desc":"Looks like this IP banned and here we can't get any SID. So, use proxy or change host."}}})
+        editException["error_code"], editException["error_desc"] = 403, exceptionAnswers['IPban']
+        return jsonify(exceptionAnswers['answerExample'])
     except requests.exceptions.ConnectionError as e:
         if proxy:
-            statusinfo = f"Proxy aborted connection. Try another one. Details: {e}"
+            editException['error_desc'] = f"Proxy aborted connection. Try another one. Details: {e}"
         else:
-            statusinfo = f"Connection failed. Try another one. Details: {e}"
-        return jsonify({"answer":{"error":{"error_code":3,"error_desc":statusinfo}}})
+            editException['error_desc'] = f"Connection failed. Try another one. Details: {e}"
+        editException['error_code'] = 3
+        return jsonify(exceptionAnswers['answerExample'])
     
     except Exception as e:
         exjson = e.args[0]
         try:
-            statuscode = exjson['api:statuscode']
-            statusinfo = exjson['api:message']
+            statuscode = editException["error_code"] = exjson['api:statuscode']
         except:
-            statuscode = 2
-            statuscode = f"{type(e)}: {e}"
+            editException["error_code"], editException["error_desc"] = 2, f"{type(e)}: {e}"
+            return jsonify(exceptionAnswers['answerExample'])
 
         if statuscode in {200, 213, 214}:
-            statusinfo = "Wrong password or/and email. Try again..?"
+            editException["error_desc"] = exceptionAnswers['wrongData']
         elif statuscode in {100, 103, 104, 105, 218}:
-            statusinfo = "Seems like Team Amino something did with API again. Check if library works at all. Also you can rewrite API on another lib for Amino, if you want."
+            editException["error_desc"] = exceptionAnswers['TAdidShit']
         elif statuscode == 111:
-            statusinfo = "Sounds like TA doing something with servers. Just wait, i guess."
+            editException["error_desc"] = exceptionAnswers['maybeMaintenance']
         elif statuscode in {110, 219, 403}:
-            statusinfo = "Summary to host was sent a lot of requests. Just wait a little bit."
+            editException["error_desc"] = exceptionAnswers["tooManyRequests"]
         elif statuscode in {210, 246, 293}:
-            statusinfo = "Can't log in to the account. It can be deleted or banned by TA, f.e."
+            editException["error_desc"] = exceptionAnswers['deletedOrBanned']
         elif statuscode == 270:
-            statusinfo = "Your try to get sid here is new, so you should to verify login. Next times when you will try to get sid after verify this problem will disappear, if server will keep IP what it has right now of course."
-            return jsonify({"answer":{"error":{"error_code":statuscode,"error_desc":statusinfo, "verifyLink":exjson['url']}}})
-        return jsonify({"answer":{"error":{"error_code":statuscode,"error_desc":statusinfo}}})
+            editException["error_desc"] = exceptionAnswers['newLogin']
+            editException["verifyLink"] = exjson['url']
+        else:
+            editException["error_desc"] = exjson['api:message']
+        return jsonify(exceptionAnswers['answerExample'])
 
-#START
+###########
+# S T A R T
+###########
 if __name__ == '__main__':
     # standart run with flask:
     # app.run()
