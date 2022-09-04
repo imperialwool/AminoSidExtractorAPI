@@ -45,3 +45,21 @@ If you got error, it will keep in _"answer"_ too, but instead _"sid"_ you will s
 _"Verification Required"_ error also returns extra field _"verifyLink"_. 
 
 Example of error: ``{"answer":{"error":{"error_code":200,"error_desc":"Wrong password or/and email. Try again..?"}}}``
+
+## Example
+In console:
+```shell
+git clone https://github.com/toxichead/AminoSidExtractorAPI.git
+cd AminoSidExtractorAPI
+python3 app.py
+```
+In script:
+```python
+import aminofix
+email = "adbots@are.gay"
+password = "adbotscreatorswillburninhell"
+sid = requests.get(f"https://your-domain-or-ip.here/getsid?email={email}&passwd={password}")
+client = aminofix.Client()
+client.login_sid(sid)
+# ...
+```
