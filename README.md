@@ -63,3 +63,9 @@ client = aminofix.Client()
 client.login_sid(sid)
 # ...
 ```
+
+## To-Do
+- cleaner readme
+- cleaner code (i hate how it's look like for some reason)
+- sid query (so here's database support)
+- launch this thing public (maybe somebody need this thing but lazy af)
