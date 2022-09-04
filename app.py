@@ -29,11 +29,11 @@ def pingPong():
 @app.route('/getsid', methods = ['POST', 'GET'])
 def sidextractor():
     if request.method == 'POST':
-        emaill, passwd, proxy = emaill = request.form.get('email'), request.form.get('passwd'), request.form.get('proxy')
+        emaill, passwd, proxy = request.form.get('email'), request.form.get('passwd'), request.form.get('proxy')
     else:
         emaill, passwd, proxy = request.args.get('email'), request.args.get('passwd'), request.args.get('proxy')
     proxies = {}
-    if proxy:
+    if proxy and proxy != '':
         proxies = {"https": proxy}
 
     if emaill == '':
